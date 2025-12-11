@@ -39,6 +39,16 @@ body {
     font-size: 13px;
 }
 
+#sidebar::-webkit-scrollbar {
+    background-color: var(--color-grid-minor);
+    width: 12px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--color-grid-major);
+    border-radius: 5px;
+}
+
 #container {
     flex-grow: 1;
     position: relative;
