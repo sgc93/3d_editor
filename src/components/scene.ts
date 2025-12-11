@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { TransformControls } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import type { ObjectType } from "../types/SceneTypes";
 
 // --- DOM ---
 const canvas = document.getElementById("viewport-canvas") as HTMLCanvasElement;
@@ -15,7 +16,10 @@ let camera: THREE.PerspectiveCamera;
 let renderer: THREE.WebGLRenderer;
 let controls: OrbitControls;
 let transformControls: TransformControls;
-let mesh: THREE.Mesh | null = null;
+
+// --- OBJECTS ---
+let sceneObjects: THREE.Mesh[] = [];
+let selectedObject: THREE.Mesh | null = null;
 
 // --- SIZES ---
 const INIFINITE_GRID_SIZE = 2000;
@@ -98,34 +102,71 @@ const animate = () => {
   renderer.render(scene, camera);
 };
 
-const addNewObject = () => {
-  // Detach and remove old mesh/controls if they exist
-  if (mesh) {
-    transformControls.detach();
-    scene.remove(mesh);
-    mesh.geometry.dispose();
-    (mesh.material as THREE.Material).dispose();
-  }
-
-  // Create the new default cube
-  const geometry = new THREE.BoxGeometry(2, 2, 2, 2, 2, 2);
-  const material = new THREE.MeshStandardMaterial({
-    color: "#6b6c6e ",
+const createDefaultMaterial = () => {
+  return new THREE.MeshStandardMaterial({
+    color: "#6b6c6e",
     roughness: 0.4,
     metalness: 0.1
   });
+};
 
-  mesh = new THREE.Mesh(geometry, material);
-  mesh.position.set(0, 1, 0);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  scene.add(mesh);
+export const createObject = (type: ObjectType) => {
+  let geometry: THREE.BufferGeometry;
+  let newMesh: THREE.Mesh;
 
-  // Attach controls to the new mesh
-  transformControls.attach(mesh);
+  switch (type) {
+    case "box":
+    case "mesh":
+      geometry = new THREE.BoxGeometry(2, 2, 2);
+      break;
+    case "plane":
+      geometry = new THREE.PlaneGeometry(10, 10);
+      break;
+    case "sphere":
+      geometry = new THREE.SphereGeometry(1.5, 32, 16);
+      break;
+    case "cylinder":
+      geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
+      break;
+    case "cone":
+      geometry = new THREE.ConeGeometry(1.5, 3, 32);
+      break;
+    case "torus":
+      geometry = new THREE.TorusGeometry(2, 0.5, 16, 100);
+      break;
+    case "text":
+      // FIXEME handle displaying text
+      geometry = new THREE.BoxGeometry(2, 2, 0.2);
+      break;
+    default:
+      return;
+  }
+
+  const material = createDefaultMaterial();
+  newMesh = new THREE.Mesh(geometry, material);
+
+  if (type === "plane") {
+    newMesh.rotation.x = -Math.PI / 2;
+  }
+  if (type === "torus") {
+    newMesh.rotation.x = Math.PI / 2;
+  }
+
+  newMesh.castShadow = true;
+  newMesh.receiveShadow = true;
+
+  scene.add(newMesh);
+  sceneObjects.push(newMesh);
+  selectedObject = newMesh;
+
+  transformControls.attach(selectedObject);
+};
+
+const initApp = () => {
+  initScene();
+  createObject("torus");
 };
 
 if (canvas) {
-  initScene();
-  addNewObject();
+  initApp();
 }
