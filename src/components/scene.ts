@@ -37,6 +37,7 @@ const initScene = () => {
     canvas,
     antialias: true
   });
+  renderer.shadowMap.enabled = true;
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -59,6 +60,8 @@ const initScene = () => {
   // --- LIGHT ---
   const ambientLight = new THREE.AmbientLight("#ffffff", 0.4);
   const directionalLinght = new THREE.DirectionalLight("#fff", 1.2);
+  directionalLinght.position.set(10, 10, 5);
+  directionalLinght.castShadow = true;
   scene.add(ambientLight, directionalLinght);
 
   // --- TRANSFORM CONTROLS (Object Manipulation) ---
@@ -114,6 +117,8 @@ const addNewObject = () => {
 
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(0, 1, 0);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
   scene.add(mesh);
 
   // Attach controls to the new mesh
