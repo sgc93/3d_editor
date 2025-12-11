@@ -9,13 +9,11 @@
   <body>
     <div id="app" class="flex flex-col w-screen h-screen">
       <div class="flex bg-n-800 px-3 py-2 border-b border-n-300 text-accent-1">
-        <img src="./logo.png" class="w-18"/>
+        <img src="./logo.png" class="w-18" />
       </div>
       <div class="flex-1 flex">
-        <div id="container" class="flex-1 flex bg-n-600"></div>
-        <div id="sidebar" class=" w-80 bg-n-600/60 p-5">
-          sidebar
-        </div>
+        <canvas id="viewport-canvas" class="flex-1 min-w-0 bg-n-600"></canvas>
+        <div id="sidebar" class="w-80 bg-n-600/60 p-5">sidebar</div>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
