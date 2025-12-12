@@ -1,22 +1,29 @@
 import * as THREE from "three";
+// Import the actual implementation functions
 import { displayOpenObjects, displaySelectedOjbect } from "./sidebar";
-import { TransformControls } from "three/examples/jsm/Addons.js";
+import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { ObjectType, SceneObject } from "../types/SceneTypes";
+import type {
+  ObjectModeType,
+  ObjectType,
+  SceneObject
+} from "../types/SceneTypes";
 
 // --- DOM ---
-const canvas = document.getElementById("viewport-canvas") as HTMLCanvasElement;
-if (!canvas) {
-  console.error("Canas element not loaded!");
+const viewport = document.getElementById("viewport") as HTMLDivElement;
+if (!viewport) {
+  console.error("Viewport element not found!");
 }
 
 // --- CORE GLOBALS ---
-
 let scene: THREE.Scene;
+let raycaster: THREE.Raycaster;
+let mouse: THREE.Vector2;
 let camera: THREE.PerspectiveCamera;
 let renderer: THREE.WebGLRenderer;
 let controls: OrbitControls;
 let transformControls: TransformControls;
+let boundingBoxHelper: THREE.BoxHelper | null = null;
 
 // --- OBJECTS ---
 export let sceneObjects: SceneObject[] = [];
@@ -25,8 +32,8 @@ export let selectedObject: SceneObject | null = null;
 let typeCounter: { [key: string]: number } = {};
 
 // --- SIZES ---
-const INIFINITE_GRID_SIZE = 2000;
-const CAMERA_FAR_PLANE = INIFINITE_GRID_SIZE + 5000;
+const INFINITE_GRID_SIZE = 2000;
+const CAMERA_FAR_PLANE = INFINITE_GRID_SIZE + 5000;
 
 const initScene = () => {
   // --- SCENE | CAMERA | RENDERE---
@@ -34,62 +41,77 @@ const initScene = () => {
   scene.background = new THREE.Color("#424342");
   camera = new THREE.PerspectiveCamera(
     75,
-    canvas.clientWidth / canvas.clientHeight,
+    viewport.clientWidth / viewport.clientHeight,
     0.1,
     CAMERA_FAR_PLANE
   );
   camera.position.set(5, 5, 5);
-
   // --- RENDERER ---
+
   renderer = new THREE.WebGLRenderer({
-    canvas,
     antialias: true
   });
+  renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+  viewport.appendChild(renderer.domElement);
   renderer.shadowMap.enabled = true;
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-
+  renderer.domElement.addEventListener("pointerdown", onPointerClick, false); // CHANGED: pointerdown is usually better for interactivity
   // --- CONTROLS ---
+
   controls = new OrbitControls(camera, renderer.domElement);
+  controls.listenToKeyEvents(window);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
-
   // --- HELPERS: GRID, AXES ---
+
   const grid = new THREE.GridHelper(
-    INIFINITE_GRID_SIZE,
+    INFINITE_GRID_SIZE,
     1000,
     "#6d6d6d",
     "#4d4d4d"
   );
+  scene.add(grid);
+
   const axes = new THREE.AxesHelper(3);
   axes.setColors("#facc15", "#0466c8", "#25a244");
-  scene.add(grid, axes);
-
+  scene.add(axes);
   // --- LIGHT ---
+
   const ambientLight = new THREE.AmbientLight("#ffffff", 0.4);
   const directionalLinght = new THREE.DirectionalLight("#fff", 1.2);
   directionalLinght.position.set(10, 10, 5);
   directionalLinght.castShadow = true;
   scene.add(ambientLight, directionalLinght);
 
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2();
   // --- TRANSFORM CONTROLS (Object Manipulation) ---
-  transformControls = new TransformControls(camera, renderer.domElement);
-  transformControls.addEventListener("dragging-changed", (event) => {
-    controls.enabled = !event.value;
-
-    // FIXME update sidebar when drag ends
-  });
+  transformControls = new TransformControls(camera, renderer.domElement); // FIX 2: Added event listener to update selection helpers on transform change
   transformControls.addEventListener("change", () => {
-    if (transformControls.dragging) {
-      // FIXME update without refreshing all dimensions
+    if (selectedObject) {
+      if (boundingBoxHelper) boundingBoxHelper.update();
+      displaySelectedOjbect(selectedObject);
     }
+    renderer.render(scene, camera);
+  }); // FIX 3: Added logic to update selection helpers and sidebar when transform is complete
+
+  transformControls.addEventListener("objectChange", () => {
+    if (selectedObject) {
+      if (boundingBoxHelper) boundingBoxHelper.update(); // Ensure the object's properties are logged after manipulation
+      displaySelectedOjbect(selectedObject);
+    }
+  }); // This correctly disables orbit controls while dragging
+  transformControls.addEventListener("dragging-changed", function (event) {
+    controls.enabled = !event.value;
   });
+
   scene.add(transformControls as unknown as THREE.Object3D);
 
+  renderer.render(scene, camera);
   // --- RESIZE HANDLER ---
+
   window.addEventListener("resize", () => {
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
+    const w = viewport.clientWidth;
+    const h = viewport.clientHeight;
 
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
@@ -106,20 +128,143 @@ const animate = () => {
   renderer.render(scene, camera);
 };
 
+function onPointerClick(event: PointerEvent) {
+  // Check if the TransformControls is currently active (e.g., rotating, dragging)
+  if (transformControls.dragging) {
+    return;
+  }
+
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+
+  // FIX 4: Only check the actual meshes for intersection.
+  // Filter out all scene-level helpers/lights/controls.
+  const meshes = sceneObjects.map((obj) => obj.mesh);
+  const intersects = raycaster.intersectObjects(meshes, false);
+
+  if (intersects.length > 0) {
+    // Find the object from your sceneObjects array using the mesh reference
+    const intersectedMesh = intersects[0].object as THREE.Mesh;
+    const sceneObject = sceneObjects.find(
+      (obj) => obj.mesh === intersectedMesh
+    );
+
+    if (sceneObject) {
+      selectObject(sceneObject.id);
+      console.log(sceneObject.name);
+      return;
+    }
+  }
+
+  // Deselect if no objects were intersected or a non-mesh object was hit.
+  selectObject("");
+}
+
+const updateSelectionHelpers = (object: SceneObject | null) => {
+  if (boundingBoxHelper) scene.remove(boundingBoxHelper);
+  boundingBoxHelper = null;
+
+  if (object) {
+    const mesh = object.mesh;
+
+    // Add the bounding box helper
+    boundingBoxHelper = new THREE.BoxHelper(mesh, "#f77f00");
+    scene.add(boundingBoxHelper); // Attach the TransformControls to the selected mesh
+
+    transformControls.attach(object.mesh);
+  } else {
+    // If no object is selected, detach the transform controls
+    transformControls.detach();
+  }
+};
+
+export const selectMode = (mode: ObjectModeType) => {
+  if (selectedObject) {
+    transformControls.setMode(mode);
+    selectedObject.mode = mode;
+  } else {
+    transformControls.detach();
+    console.error("There is no selected object");
+  }
+};
+
 const findObjectById = (id: string): SceneObject | null => {
   return sceneObjects.find((obj) => obj.id === id) || null;
 };
 
 const selectObject = (objectId: string) => {
-  const objectToSelect = findObjectById(objectId);
+  const objectToSelect = findObjectById(objectId); // Logic for deselecting an object
 
-  if (!objectToSelect) return;
+  if (!objectToSelect) {
+    // Check if an object was previously selected before deselecting
+    if (selectedObject) {
+      selectedObject = null;
+      updateSelectionHelpers(null);
+      displaySelectedOjbect(null);
+      displayOpenObjects(sceneObjects, null);
+    }
+    return;
+  } // Only update selection if the object is new
 
-  selectedObject = objectToSelect;
-  transformControls.attach(selectedObject.mesh);
+  if (selectedObject?.id !== objectToSelect.id) {
+    selectedObject = objectToSelect;
+    updateSelectionHelpers(selectedObject);
+  } else {
+    // FIX 5: If the same object is clicked, just ensure the helpers update
+    // e.g. if the bounding box was removed by a key command.
+    updateSelectionHelpers(selectedObject);
+  } // Ensure the correct mode is set when selected
 
+  selectMode(selectedObject.mode || "translate");
   displaySelectedOjbect(selectedObject);
   displayOpenObjects(sceneObjects, selectedObject);
+};
+
+// Add this function near your selectObject function
+export const deleteObject = (id: string) => {
+  const objeTobeDelteted = findObjectById(id);
+
+  if (objeTobeDelteted) {
+    scene.remove(objeTobeDelteted.mesh);
+
+    if (selectedObject?.id === objeTobeDelteted.id) {
+      selectedObject.mesh.geometry.dispose();
+      (selectedObject.mesh.material as THREE.Material).dispose();
+      selectedObject = null;
+
+      if (boundingBoxHelper) {
+        scene.remove(boundingBoxHelper);
+        boundingBoxHelper = null;
+      }
+
+      transformControls.detach();
+    }
+
+    const index = sceneObjects.findIndex(
+      (obj) => obj.id === objeTobeDelteted.id
+    );
+    if (index > -1) {
+      sceneObjects.splice(index, 1);
+    }
+
+    const deletedObjectName = objeTobeDelteted.name;
+
+    displaySelectedOjbect(selectedObject);
+    displayOpenObjects(sceneObjects, selectedObject);
+
+    console.log(`Deleted object: ${deletedObjectName}`);
+  } else {
+    console.log("object not find to delete");
+  }
+};
+
+export const deleteSelectedObject = () => {
+  if(selectedObject){
+    deleteObject(selectedObject.id)
+  }
 };
 
 const createDefaultMaterial = () => {
@@ -154,8 +299,7 @@ export const createObject = (type: ObjectType) => {
     case "torus":
       geometry = new THREE.TorusGeometry(2, 0.5, 16, 100);
       break;
-    case "text":
-      // FIXEME handle displaying text
+    case "text": // FIXEME handle displaying text
       geometry = new THREE.BoxGeometry(2, 2, 0.2);
       break;
     default:
@@ -172,28 +316,29 @@ export const createObject = (type: ObjectType) => {
     newMesh.rotation.x = Math.PI / 2;
   }
 
-  newMesh.castShadow = true;
-  newMesh.receiveShadow = true;
-
-  scene.add(newMesh);
-
   let currCount = typeCounter[type] || 0;
   currCount++;
   typeCounter[type] = currCount;
+
+  newMesh.castShadow = true;
+  newMesh.receiveShadow = true;
+  newMesh.name = `${
+    type.charAt(0).toUpperCase() + type.slice(1)
+  } (${currCount})`;
+
+  scene.add(newMesh);
 
   const newSceneObj: SceneObject = {
     id: `obj_${type}_${Date.now()}_${currCount}`,
     type,
     name: `${type.charAt(0).toUpperCase() + type.slice(1)} (${currCount})`,
-    mesh: newMesh
+    mesh: newMesh,
+    mode: "translate"
   };
 
   sceneObjects.push(newSceneObj);
-  selectedObject = newSceneObj;
+  selectedObject = newSceneObj; // The selection will now automatically handle attaching controls/updating sidebar
 
-  transformControls.attach(selectedObject.mesh);
-
-  displayOpenObjects(sceneObjects, selectedObject);
   selectObject(newSceneObj.id);
 };
 
@@ -202,7 +347,8 @@ const initApp = () => {
   createObject("torus");
 };
 
-if (canvas) {
+if (viewport) {
   (window as any).handleSelectObject = selectObject;
+  (window as any).deleteObject = deleteObject;
   initApp();
 }
