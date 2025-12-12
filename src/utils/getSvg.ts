@@ -1,4 +1,4 @@
-export const getSvg = (type: string) => {
+export const getSvg = (type: string, isSelected: boolean) => {
   switch (type) {
     case "box":
     case "mesh":
@@ -13,7 +13,11 @@ export const getSvg = (type: string) => {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1"
+                class="w-3.5 h-3.5 transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1"
+                    : "stroke-n-100 group-hover:stroke-accent-1"
+                }"
             >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path
@@ -31,7 +35,11 @@ export const getSvg = (type: string) => {
                 height="24"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1 group-hover:fill-accent-1"
+                class="w-3.5 h-3.5 transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1 fill-accent-1"
+                    : "stroke-n-100 group-hover:stroke-accent-1 group-hover:fill-accent-1"
+                } "
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path
@@ -49,7 +57,11 @@ export const getSvg = (type: string) => {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1"
+                class="w-3.5 h-3.5 transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1"
+                    : "stroke-n-100 group-hover:stroke-accent-1"
+                }"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M3 12c0 1.657 4.03 3 9 3s9 -1.343 9 -3" />
@@ -66,7 +78,11 @@ export const getSvg = (type: string) => {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1"
+                class="w-3.5 h-3.5 transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1"
+                    : "stroke-n-100 group-hover:stroke-accent-1"
+                }"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 6m-7 0a7 3 0 1 0 14 0a7 3 0 1 0 -14 0" />
@@ -79,7 +95,11 @@ export const getSvg = (type: string) => {
                 height="24"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1 group-hover:fill-accent-1"
+                class="w-3.5 h-3.5 transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1 fill-accent-1"
+                    : "stroke-n-100 group-hover:stroke-accent-1 group-hover:fill-accent-1"
+                }"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path
@@ -97,7 +117,11 @@ export const getSvg = (type: string) => {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1"
+                class="w-3.5 h-3.5 transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1 "
+                    : "stroke-n-100 group-hover:stroke-accent-1"
+                }"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path
@@ -115,7 +139,11 @@ export const getSvg = (type: string) => {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1"
+                class="w-3.5 h-3.5  transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1"
+                    : "stroke-n-100 group-hover:stroke-accent-1"
+                }"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M7 20v-12a4 4 0 0 1 4 -4h2a4 4 0 0 1 4 4v12" />
@@ -132,7 +160,11 @@ export const getSvg = (type: string) => {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-3.5 h-3.5 stroke-n-100 transition-all duration-300 group-hover:stroke-accent-1"
+                class="w-3.5 h-3.5  transition-all duration-300 ${
+                  isSelected
+                    ? "stroke-accent-1 fill-accent-1"
+                    : "stroke-n-100 group-hover:stroke-accent-1"
+                }"
             >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path
