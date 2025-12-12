@@ -56,24 +56,16 @@ The core 3D editor functionality and foundational components are complete:
 
 - **Mode Switching:** swith betwee translate, rotate and scale modes with cta buttons or shortcuts: g, r and s respectively.
 - **Sidebar Editor:** Manual input fields in the sidebar to precisely set the Position, Rotation (in degrees), and Scale of the selected object.
+- **Orbit Cotrols:** mode based helper orbit controls displayed according to the type of mode for the selected object.
 
 ### Persistence
-
 - **Export Scene:** Exports the current scene state (all objects, types, and transforms) to a downloadable JSON file.
 - **Import Scene:** Clears the current scene and reconstructs it based on a loaded JSON file.
 
 ---
 
-## 3. To Do: Fixes and Future Features
-
-### Priority Fixes (Stability)
-
-- TransformControls Interactivity
-
-### Feature Enhancements (Usability)
-
+## 3. To Do
 - Undo/Redo History
-- OrbitControls
 - Material Editor
 - Light Editor
 - Group Objects
