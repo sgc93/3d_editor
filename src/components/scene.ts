@@ -157,6 +157,8 @@ function onPointerClick(event: PointerEvent) {
       selectObject(sceneObject.id);
       console.log(sceneObject.name);
       return;
+    } else {
+      selectObject('lfjdf')
     }
   }
 
@@ -220,7 +222,6 @@ const selectObject = (objectId: string) => {
   const objectToSelect = findObjectById(objectId); // Logic for deselecting an object
 
   if (!objectToSelect) {
-    // Check if an object was previously selected before deselecting
     if (selectedObject) {
       selectedObject = null;
       updateSelectionHelpers(null);
@@ -228,7 +229,7 @@ const selectObject = (objectId: string) => {
       displayOpenObjects(sceneObjects, null);
     }
     return;
-  } // Only update selection if the object is new
+  }
 
   if (selectedObject?.id !== objectToSelect.id) {
     selectedObject = objectToSelect;
