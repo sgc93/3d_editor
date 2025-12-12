@@ -240,7 +240,6 @@ const toggleBtnClick = () => {
         sidebar.classList.remove("sidebar-flex");
         sidebar.classList.add("sidebar-hidden");
 
-        toggleBtn.classList.remove("bg-accent-1/80");
         sidebarIcon.classList.add("rotate-y-180");
 
         isSidebarOpen = false;
@@ -248,10 +247,14 @@ const toggleBtnClick = () => {
         sidebar.classList.remove("sidebar-hidden");
         sidebar.classList.add("sidebar-flex");
 
-        toggleBtn.classList.add("bg-accent-1/80");
         sidebarIcon.classList.remove("rotate-y-180");
 
         isSidebarOpen = true;
+      }
+
+      if (window.innerWidth < 768) {
+        sidebar.classList.remove("max-md:translate-x-[120%]");
+        sidebar.classList.add("max-md:translate-x-0");
       }
     }
   });

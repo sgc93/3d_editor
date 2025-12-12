@@ -71,14 +71,6 @@ body {
   }
 }
 
-@media (max-width: 768px) {
-  #sidebar {
-    width: 0;
-    opacity: 0;
-    transform: translateX(100%);
-  }
-}
-
 .notif-hidden {
   top: -54px;
   opacity: 0;
