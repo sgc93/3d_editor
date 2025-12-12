@@ -2,8 +2,6 @@
 
 A lightweight web-based 3D scene editor built with Three.js for interactive object manipulation and scene management.
 
----
-
 ## How to Run the App
 
 This project uses **Vite** as a modern build tool and development server, and **TypeScript** for code quality.
@@ -29,8 +27,6 @@ This project uses **Vite** as a modern build tool and development server, and **
     ```
 
 The application will typically be available at `http://localhost:5173/`.
-
----
 
 ## 2. Completed Features
 
@@ -61,8 +57,6 @@ The core 3D editor functionality and foundational components are complete:
 ### Persistence
 - **Export Scene:** Exports the current scene state (all objects, types, and transforms) to a downloadable JSON file.
 - **Import Scene:** Clears the current scene and reconstructs it based on a loaded JSON file.
-
----
 
 ## 3. To Do
 - Undo/Redo History
