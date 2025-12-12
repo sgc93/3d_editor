@@ -117,6 +117,7 @@ const initEventListeners = () => {
 
 const initUiListeners = () => {
   const buttons = document.querySelectorAll(".add-object-btn");
+  const modeBtns = document.querySelectorAll(".change-mode-btn");
 
   objectListBtn.addEventListener("click", () => toggleObjectList());
 
@@ -128,6 +129,20 @@ const initUiListeners = () => {
       if (type) {
         createObject(type as any);
         toggleObjectList();
+      }
+    });
+  });
+
+
+  modeBtns.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const targetButton = event.currentTarget as HTMLButtonElement;
+      const type = targetButton.dataset.type;
+
+      if (type) {
+        selectMode(type as any);
+      } else {
+        console.error("no mode detected");
       }
     });
   });

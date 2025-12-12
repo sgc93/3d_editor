@@ -8,6 +8,7 @@ import type {
   ObjectType,
   SceneObject
 } from "../types/SceneTypes";
+// import { colorModeBtns } from "../utils/getSvg";
 
 // --- DOM ---
 const viewport = document.getElementById("viewport") as HTMLDivElement;
@@ -181,10 +182,30 @@ const updateSelectionHelpers = (object: SceneObject | null) => {
   }
 };
 
+export const colorModeBtns = (mode: ObjectModeType) => {
+  const changeModeBtns =
+    document.querySelectorAll<HTMLButtonElement>(".change-mode-btn");
+
+  changeModeBtns.forEach((button) => {
+    const type = button.dataset.type;
+
+    if (type === mode) {
+      button.classList.remove("bg-n-300/70", "hover:bg-accent-1");
+      button.classList.add("bg-accent-1");
+      console.log(button.classList);
+    } else {
+      button.classList.remove("bg-accent-1");
+      button.classList.add("bg-n-300/70", "hover:bg-accent-1");
+      console.log(button.classList);
+    }
+  });
+};
+
 export const selectMode = (mode: ObjectModeType) => {
   if (selectedObject) {
     transformControls.setMode(mode);
     selectedObject.mode = mode;
+    colorModeBtns(mode);
   } else {
     transformControls.detach();
     console.error("There is no selected object");
@@ -213,10 +234,8 @@ const selectObject = (objectId: string) => {
     selectedObject = objectToSelect;
     updateSelectionHelpers(selectedObject);
   } else {
-    // FIX 5: If the same object is clicked, just ensure the helpers update
-    // e.g. if the bounding box was removed by a key command.
     updateSelectionHelpers(selectedObject);
-  } // Ensure the correct mode is set when selected
+  }
 
   selectMode(selectedObject.mode || "translate");
   displaySelectedOjbect(selectedObject);
@@ -262,8 +281,8 @@ export const deleteObject = (id: string) => {
 };
 
 export const deleteSelectedObject = () => {
-  if(selectedObject){
-    deleteObject(selectedObject.id)
+  if (selectedObject) {
+    deleteObject(selectedObject.id);
   }
 };
 
