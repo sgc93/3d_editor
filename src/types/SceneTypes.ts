@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 export type ObjectType =
   | "box"
   | "mesh"
@@ -7,3 +9,10 @@ export type ObjectType =
   | "cone"
   | "torus"
   | "text";
+
+export type SceneObject = {
+  id: string;
+  type: string;
+  name: string;
+  mesh: THREE.Mesh;
+};
