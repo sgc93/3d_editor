@@ -1,7 +1,8 @@
 import * as THREE from "three";
+import { displayOpenObjects } from "./sidebar";
 import { TransformControls } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { ObjectType } from "../types/SceneTypes";
+import type { ObjectType, SceneObject } from "../types/SceneTypes";
 
 // --- DOM ---
 const canvas = document.getElementById("viewport-canvas") as HTMLCanvasElement;
@@ -18,12 +19,15 @@ let controls: OrbitControls;
 let transformControls: TransformControls;
 
 // --- OBJECTS ---
-let sceneObjects: THREE.Mesh[] = [];
-let selectedObject: THREE.Mesh | null = null;
+export let sceneObjects: SceneObject[] = [];
+export let selectedObject: SceneObject | null = null;
+
+let typeCounter: { [key: string]: number } = {};
 
 // --- SIZES ---
 const INIFINITE_GRID_SIZE = 2000;
 const CAMERA_FAR_PLANE = INIFINITE_GRID_SIZE + 5000;
+
 const initScene = () => {
   // --- SCENE | CAMERA | RENDERE---
   scene = new THREE.Scene();
@@ -156,10 +160,24 @@ export const createObject = (type: ObjectType) => {
   newMesh.receiveShadow = true;
 
   scene.add(newMesh);
-  sceneObjects.push(newMesh);
-  selectedObject = newMesh;
 
-  transformControls.attach(selectedObject);
+  let currCount = typeCounter[type] || 0;
+  currCount++;
+  typeCounter[type] = currCount;
+
+  const newSceneObj: SceneObject = {
+    id: `obj_${type}_${Date.now()}_${currCount}`,
+    type,
+    name: `${type.charAt(0).toUpperCase() + type.slice(1)} (${currCount})`,
+    mesh: newMesh
+  };
+
+  sceneObjects.push(newSceneObj);
+  selectedObject = newSceneObj;
+
+  transformControls.attach(selectedObject.mesh);
+
+  displayOpenObjects(sceneObjects);
 };
 
 const initApp = () => {
