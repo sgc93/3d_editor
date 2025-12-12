@@ -162,6 +162,78 @@
                 </div>
               </button>
             </div>
+            <div class="flex gap-1.5 border-l border-n-400/50 pl-1.5">
+              <button
+                data-type="export"
+                class="json-btn relative group cursor-pointer p-1.5 rounded-md transition-all duration-300  bg-n-300/70 hover:bg-accent-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-5 h-5 stroke-n-100 transition-all duration-300 group-hover:stroke-n-50"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                  <path
+                    d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"
+                  />
+                  <path d="M9 15h6" />
+                  <path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                </svg>
+                <div
+                  class="absolute -top-[120%] left-1/2 z-10 -translate-x-1/2 w-max flex items-center justify-center gap-2 px-2 py-0.5 rounded-md bg-n-700 shadow-md shadow-n-900 border border-n-900 transition-all duration-300 translate-y-1 scale-0 opacity-0 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 origin-bottom"
+                >
+                  <div
+                    class="absolute -bottom-1.5 -z-20 w-3 h-3 bg-n-700 rotate-45"
+                  ></div>
+                  <span class="text-xs font-semibold tracking-wider"
+                    >Export</span
+                  >
+                </div>
+              </button>
+              <button
+                data-type="emport"
+                class="json-btn change-mode-btn relative group cursor-pointer p-1.5 rounded-md transition-all duration-300 bg-n-300/70 hover:bg-accent-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-5 h-5 stroke-n-100 transition-all duration-300 group-hover:stroke-n-50"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                  <path
+                    d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"
+                  />
+                  <path d="M15 15h-6" />
+                  <path d="M11.5 17.5l-2.5 -2.5l2.5 -2.5" />
+                </svg>
+                <div
+                  class="absolute -top-[120%] left-1/2 z-10 -translate-x-1/2 w-max flex items-center justify-center gap-2 px-2 py-0.5 rounded-md bg-n-700 shadow-md shadow-n-900 border border-n-900 transition-all duration-300 translate-y-1 scale-0 opacity-0 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 origin-bottom"
+                >
+                  <div
+                    class="absolute -bottom-1.5 -z-20 w-3 h-3 bg-n-700 rotate-45"
+                  ></div>
+                  <span class="text-xs font-semibold tracking-wider"
+                    >Import JSON</span
+                  >
+                </div>
+              </button>
+            </div>
           </div>
           <div
             id="object-list-box"
@@ -501,7 +573,9 @@
                   id="customize-box-overlay"
                   class="hidden absolute w-full h-full flex-col gap-1 items-center justify-center bg-n-600/50 backdrop-blur-md"
                 >
-                  <span class="text-sm text-accent-1 font-semibold">No Object Is Selected!</span>
+                  <span class="text-sm text-accent-1 font-semibold"
+                    >No Object Is Selected!</span
+                  >
                   <span class="text-xs text-n-100"
                     >Select object or add new shap</span
                   >
@@ -542,7 +616,7 @@
                       type="number"
                       id="translate-x"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                   <div class="flex items-center gap-1 pl-2">
@@ -556,7 +630,7 @@
                       type="number"
                       id="translate-y"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                   <div class="flex items-center gap-1.5 pl-2">
@@ -570,7 +644,7 @@
                       type="number"
                       id="translate-z"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                 </div>
@@ -579,23 +653,23 @@
                     class="w-full flex items-center gap-2 px-1.5 py-0.5 bg-n-600/40"
                   >
                     <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-5 h-5 stroke-n-100 transition-all duration-300 group-hover:stroke-n-50"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M17 15.328c2.414 -.718 4 -1.94 4 -3.328c0 -2.21 -4.03 -4 -9 -4s-9 1.79 -9 4s4.03 4 9 4"
-                  />
-                  <path d="M9 13l3 3l-3 3" />
-                </svg>
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="w-5 h-5 stroke-n-100 transition-all duration-300 group-hover:stroke-n-50"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path
+                        d="M17 15.328c2.414 -.718 4 -1.94 4 -3.328c0 -2.21 -4.03 -4 -9 -4s-9 1.79 -9 4s4.03 4 9 4"
+                      />
+                      <path d="M9 13l3 3l-3 3" />
+                    </svg>
 
                     <div class="grow flex items-center gap-2 justify-between">
                       <span class="text-n-100 text-sm font-semibold"
@@ -615,7 +689,7 @@
                       type="number"
                       id="rotate-x"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                   <div class="flex items-center gap-1 pl-2">
@@ -629,7 +703,7 @@
                       type="number"
                       id="rotate-y"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                   <div class="flex items-center gap-1.5 pl-2">
@@ -643,7 +717,7 @@
                       type="number"
                       id="rotate-z"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                 </div>
@@ -652,27 +726,26 @@
                     class="w-full flex items-center gap-2 px-1.5 py-0.5 bg-n-600/40"
                   >
                     <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-5 h-5 stroke-n-100 transition-all duration-300 group-hover:stroke-n-50"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M4 11v8a1 1 0 0 0 1 1h8m-9 -14v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1"
-                  />
-                  <path d="M4 12h7a1 1 0 0 1 1 1v7" />
-                </svg>
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="w-5 h-5 stroke-n-100 transition-all duration-300 group-hover:stroke-n-50"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path
+                        d="M4 11v8a1 1 0 0 0 1 1h8m-9 -14v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1"
+                      />
+                      <path d="M4 12h7a1 1 0 0 1 1 1v7" />
+                    </svg>
 
                     <div class="grow flex items-center gap-2 justify-between">
-                      <span class="text-n-100 text-sm font-semibold"
-                        >Scale</span
+                      <span class="text-n-100 text-sm font-semibold">Scale</span
                       ><span class="text-n-100 text-xs">Press S</span>
                     </div>
                   </div>
@@ -688,13 +761,11 @@
                       type="number"
                       id="scale-x"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                   <div class="flex items-center gap-1 pl-2">
-                    <label
-                      for="scale-y"
-                      class="w-5 font-semibold text-accent-6"
+                    <label for="scale-y" class="w-5 font-semibold text-accent-6"
                       >Y:
                     </label>
                     <input
@@ -702,13 +773,11 @@
                       type="number"
                       id="scale-y"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                   <div class="flex items-center gap-1.5 pl-2">
-                    <label
-                      for="scale-z"
-                      class="w-5 font-semibold text-accent-2"
+                    <label for="scale-z" class="w-5 font-semibold text-accent-2"
                       >Z:
                     </label>
                     <input
@@ -716,7 +785,7 @@
                       type="number"
                       id="scale-z"
                       value="0"
-                      step="1"
+                      step="0.25"
                     />
                   </div>
                 </div>
