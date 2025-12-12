@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { displayOpenObjects, displaySelectedOjbect } from "./sidebar";
-import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { TransformControls } from "three/addons/controls/TransformControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
 import type {
   ExportedObject,
   ObjectModeType,
@@ -65,6 +66,7 @@ const initScene = () => {
   controls.listenToKeyEvents(window);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
+  controls.enablePan = true;
 
   // --- HELPERS: GRID, AXES ---
 
@@ -92,6 +94,8 @@ const initScene = () => {
 
   // --- TRANSFORM CONTROLS (Object Manipulation) ---
   transformControls = new TransformControls(camera, renderer.domElement); // FIXME Added event listener to update selection helpers on transform change
+  const helpers = transformControls.getHelper();
+  scene.add(helpers);
   transformControls.addEventListener("change", () => {
     if (selectedObject) {
       if (boundingBoxHelper) boundingBoxHelper.update();
