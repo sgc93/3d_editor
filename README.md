@@ -32,7 +32,7 @@ The application will typically be available at `http://localhost:5173/`.
 
 ---
 
-## 2. ✅ Completed Features
+## 2. Completed Features
 
 The core 3D editor functionality and foundational components are complete:
 
@@ -64,28 +64,24 @@ The core 3D editor functionality and foundational components are complete:
 
 ---
 
-## 3. 📝 To Do: Fixes and Future Features
-
-With more time, the following features and fixes would be prioritized:
+## 3. To Do: Fixes and Future Features
 
 ### Priority Fixes (Stability)
 
-- **TransformControls Interactivity:** Resolve the persistent issue where the **Transform Controls gizmo occasionally fails to respond or is overridden by Orbit Controls**, despite the `dragging-changed` listener. This likely requires refining the `onPointerClick` logic to explicitly check for intersection with the gizmo's internal handles _before_ running object selection.
-- **Import Counter:** Ensure the `typeCounter` is correctly initialized during import to prevent immediate naming conflicts on subsequent new object creation (e.g., loading "Box (5)" and then creating a new box named "Box (1)").
-- **Rotation Display:** Improve how manual rotation input handles gimbal lock scenarios.
+- TransformControls Interactivity
 
 ### Feature Enhancements (Usability)
 
-- **Undo/Redo History:** Basic state management is implemented to capture changes (Creation, Deletion, Transformation completion) for multi-level undo and redo functionality.
+- Undo/Redo History
+- OrbitControls
+- Material Editor
+- Light Editor
+- Group Objects
+- Keyboard Shortcuts
 
-- **Material Editor:** Add UI controls to edit material properties (Color, Roughness, Metalness, Opacity).
-- **Light Editor:** Add UI controls to modify the properties of the directional light (Position, Intensity, Color).
-- **Group Objects:** Implement the ability to group meshes together using `THREE.Group` for combined transformation.
-- **Keyboard Shortcuts:** Extend keyboard shortcuts for utility actions (e.g., Ctrl+S for Save/Export, Duplicate object).
+## 4. Tech Stack
 
-## 4. 💻 Tech Stack
-
-> **3D Engine** : **ThreeJs**
-> **Framework** : **Vite** - Fast development server and build tool
-> **Language** : **TypeScript**
-> **Styling** : **Tailwind CSS** - Utility-first CSS framework for rapid UI crafting
+- **3D Engine** : ThreeJs
+- **Framework** : Vite - Fast development server and build tool
+- **Language** : TypeScript
+- **Styling** : Tailwind CSS - Utility-first CSS framework for rapid UI crafting
