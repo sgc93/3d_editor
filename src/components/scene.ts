@@ -410,7 +410,10 @@ export const duplicateObject = () => {
 
     newObj = {
       type: selectedObject.type,
-      name: `${selectedObject.name} - copy`,
+      name: `${selectedObject.name.slice(
+        0,
+        selectedObject.type.length
+      )}(${currCount})`,
       mesh: selectedObject.mesh.clone(),
       id: `obj_${selectedObject.type}_${new Date()}_${currCount}`,
       mode: "translate"
@@ -499,7 +502,7 @@ export const createObject = (type: ObjectType) => {
   const newSceneObj: SceneObject = {
     id: `obj_${type}_${Date.now()}_${currCount}`,
     type,
-    name: `${type.charAt(0).toUpperCase() + type.slice(1)} (${currCount})`,
+    name: `${type.charAt(0).toUpperCase() + type.slice(1)}(${currCount})`,
     mesh: newMesh,
     mode: "translate"
   };
