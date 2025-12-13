@@ -1,6 +1,7 @@
 # CUBICLE : 3D Scene Editor (THREE.js / TypeScript)
 
 A lightweight web-based 3D scene editor built with Three.js for interactive object manipulation and scene management.
+<img width="1366" height="768" alt="cubicle" src="https://github.com/user-attachments/assets/f445874a-a565-4d25-9516-e3bf5949f2db" />
 
 ## How to Run the App
 
