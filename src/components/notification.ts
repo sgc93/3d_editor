@@ -1,21 +1,31 @@
 let notifBox: HTMLDivElement | null = null;
 let notifMsgBox: HTMLSpanElement | null = null;
 
-export const addNotification = (msg: string) => {
+export const removeNotification = () => {
+  if (notifBox && notifMsgBox) {
+    notifMsgBox.innerHTML = "";
+
+    notifBox.classList.remove("notif-shown");
+    notifBox.classList.add("notif-hidden");
+  }
+};
+
+export const addNotification = (
+  msg: string,
+  autoClose: boolean = true,
+  screenTime: number = 3
+) => {
   if (notifBox && notifMsgBox) {
     notifMsgBox.innerHTML = "";
     notifMsgBox.innerHTML = msg;
     notifBox.classList.remove("notif-hidden");
     notifBox.classList.add("notif-shown");
 
-    setTimeout(() => {
-      if (notifBox && notifMsgBox) {
-        notifMsgBox.innerHTML = "";
-
-        notifBox.classList.remove("notif-shown");
-        notifBox.classList.add("notif-hidden");
-      }
-    }, 3000);
+    if (autoClose) {
+      setTimeout(() => {
+        removeNotification();
+      }, screenTime * 1000);
+    }
   }
 };
 
