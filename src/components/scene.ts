@@ -236,10 +236,6 @@ export const updateSceneObjects = (objects: ExportedObject[]) => {
 };
 
 export const clearScene = () => {
-  const geometry = new THREE.BoxGeometry(0, 0, 0);
-  const mesh = new THREE.Mesh(geometry, createDefaultMaterial());
-  scene.add(mesh);
-
   for (const obj of sceneObjects) {
     scene.remove(obj.mesh);
     obj.mesh.geometry.dispose();
@@ -379,6 +375,13 @@ export const deleteObject = (id: string) => {
       }
 
       transformControls.detach();
+    }
+
+    const index = sceneObjects.findIndex(
+      (obj) => obj.id === objeTobeDelteted.id
+    );
+    if (index > -1) {
+      sceneObjects.splice(index, 1);
     }
 
     const deletedObjectName = objeTobeDelteted.name;
