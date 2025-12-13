@@ -189,8 +189,17 @@ export const updateSceneObjects = (objects: ExportedObject[]) => {
       case "torus":
         geometry = new THREE.TorusGeometry(2, 0.5, 16, 100);
         break;
-      case "text": // FIXME handle displaying text
-        geometry = new THREE.BoxGeometry(2, 2, 0.2);
+      case "text":
+        if (font) {
+          geometry = new TextGeometry(text, {
+            font,
+            size: 1.5,
+            depth: 0.5
+          });
+        } else {
+          geometry = new THREE.BoxGeometry(2, 2, 2);
+        }
+
         break;
       default:
         return;
@@ -214,7 +223,8 @@ export const updateSceneObjects = (objects: ExportedObject[]) => {
       type: obj.type,
       name: obj.name,
       mesh: newMesh,
-      mode: "translate"
+      mode: "translate",
+      text: obj.text
     };
 
     sceneObjects.push(newSceneObj);
@@ -224,7 +234,12 @@ export const updateSceneObjects = (objects: ExportedObject[]) => {
     }
   });
 };
+
 export const clearScene = () => {
+  const geometry = new THREE.BoxGeometry(0, 0, 0);
+  const mesh = new THREE.Mesh(geometry, createDefaultMaterial());
+  scene.add(mesh);
+
   for (const obj of sceneObjects) {
     scene.remove(obj.mesh);
     obj.mesh.geometry.dispose();
@@ -366,13 +381,6 @@ export const deleteObject = (id: string) => {
       transformControls.detach();
     }
 
-    const index = sceneObjects.findIndex(
-      (obj) => obj.id === objeTobeDelteted.id
-    );
-    if (index > -1) {
-      sceneObjects.splice(index, 1);
-    }
-
     const deletedObjectName = objeTobeDelteted.name;
 
     displaySelectedOjbect(selectedObject);
@@ -504,7 +512,8 @@ export const createObject = (type: ObjectType) => {
     type,
     name: `${type.charAt(0).toUpperCase() + type.slice(1)}(${currCount})`,
     mesh: newMesh,
-    mode: "translate"
+    mode: "translate",
+    text: text
   };
 
   sceneObjects.push(newSceneObj);

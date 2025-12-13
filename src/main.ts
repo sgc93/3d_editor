@@ -111,7 +111,7 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
-const initEventListeners = () => {
+const initKeydownListrner = () => {
   window.addEventListener("keydown", handleKeydown);
 };
 
@@ -124,6 +124,7 @@ export const exportSceneToJson = (): string => {
       type: obj.type,
       name: obj.name,
       mode: obj.mode,
+      text: obj.text,
 
       position: {
         x: mesh.position.x,
@@ -155,8 +156,11 @@ export const importSceneFromJson = (jsonString: string) => {
   try {
     const sceneData: SceneData = JSON.parse(jsonString);
     clearScene();
-    updateSceneObjects(sceneData.objects);
+    if (sceneData.objects) {
+      updateSceneObjects(sceneData.objects);
+    }
   } catch (error) {
+    console.error(error);
     addNotification("Unable to load imported JSON, try again!");
   }
 };
@@ -207,7 +211,7 @@ const initUiListeners = () => {
   });
 };
 
-initEventListeners();
+initKeydownListrner();
 document.addEventListener("DOMContentLoaded", () => {
   initUiListeners();
 });
