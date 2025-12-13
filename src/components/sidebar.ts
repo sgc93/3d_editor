@@ -27,7 +27,7 @@ const createListObjectHTML = (object: SceneObject, isSelected: boolean) => {
                       isSelected
                         ? "text-accent-1"
                         : "text-n-100 group-hover:text-accent-1"
-                    }"
+                    } text-n-100 line-clamp-1 text-ellipsis max-w-50 text-start"
                     >${object.name}</span
                   >
                 </button>
